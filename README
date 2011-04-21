@@ -1,0 +1,8 @@
+The aim of this project is to create a python daemon which will poll the system for various values, including load, cpu usage, memory usage.
+It will then have options to write these to files, or push to monitoring solutions.
+
+My aim is that instead of using nrpe for nagios, we can use nginx to read the values from flat files.
+At the same time, the daemon will post the values to our yaketystats/Jart server.
+
+This is still in very developmental stages, and should not be used.
+Most functionality does not yet exist - I'm learning pythom, using this project.
