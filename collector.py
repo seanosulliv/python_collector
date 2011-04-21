@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-import sys, time, subprocess, shlex
+import os, shlex, subprocess, sys, time
 from daemon import daemon
-from socket import gethostname
 
-hostname = gethostname()
+hostname = os.uname()[1]
 
 class collector(daemon):
 	def run(self):
@@ -43,15 +42,10 @@ def get_memory():
 """
 
 def get_load():
-	loadfile = open("/proc/loadavg", "r")
-	loadavg = loadfile.read()
-	loadfile.close()
-	loadarray = shlex.split(loadavg.strip())
 
-	load1 = loadarray[0]
-	load5 = loadarray[1]
-	load15 = loadarray[2]
-	numprocs = loadarray[3]
+	load1 = os.getloadavg()[0]
+	load5 = os.getloadavg()[1]
+	load15 = os.getloadavg()[2]
 
 """ Below is if we want to write output to a file
 	This will be implemented later - mainly for nagios-type stuff.
