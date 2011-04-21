@@ -2,6 +2,9 @@
 
 import sys, time, subprocess, shlex
 from daemon import daemon
+from socket import gethostname
+
+hostname = gethostname()
 
 class collector(daemon):
 	def run(self):
@@ -31,9 +34,13 @@ def get_memory():
 	swap_used = memory_details_list[19]
 	swap_free = memory_details_list[20]
 
-	memory_details_file = open("/tmp/memory_details", "w")
-	memory_details_file.write(memory_details_out)
-	memory_details_file.close()
+""" Below is if we want to write output to a file
+	This will be implemented later - mainly for nagios-type stuff.
+
+	memory_details_outfile = open("/tmp/memory_details", "w")
+	memory_details_outfile.write(memory_details_out)
+	memory_details_outfile.close()
+"""
 
 def get_load():
 	loadfile = open("/proc/loadavg", "r")
@@ -46,9 +53,13 @@ def get_load():
 	load15 = loadarray[2]
 	numprocs = loadarray[3]
 
+""" Below is if we want to write output to a file
+	This will be implemented later - mainly for nagios-type stuff.
+
 	load_outfile = open ("/tmp/loadavg_details", "w")
 	load_outfile.write(loadavg.strip())
 	load_outfile.close()
+"""
 
 def get_cpufreqs():
 	cpufreqsfile = open("/proc/cpuinfo", "r")
@@ -61,12 +72,18 @@ def get_cpufreqs():
 			cpuline = cpufreqsfile.readline()
 			cpusplit = cpuline.split()
 	cpufreqsfile.close()
+
 	cpumhz = cpusplit[3]
 	numcpu = cpufreqs.count("cpu MHz")
 	cpufreqsarray = shlex.split(cpufreqs.strip())
+
+""" Below is if we want to write output to a file
+	This will be implemented later - mainly for nagios-type stuff.
+
 	cpufreqs_outfile = open("/tmp/cpufreqs_details", "w")
 	cpufreqs_outfile.write(cpufreqs.strip())
 	cpufreqs_outfile.close()
+"""
 
 def get_cpuuse():
 	cpu_cmd_args = "/usr/bin/sar -u 2 5"
@@ -81,9 +98,13 @@ def get_cpuuse():
 	cpu_iowait = cpu_details_list[-2]
 	cpu_idle = cpu_details_list[-1]
 
-	cpu_details_file = open("/tmp/cpu_details", "w")
-	cpu_details_file.write(cpu_details_out)
-	cpu_details_file.close()
+""" Below is if we want to write output to a file
+	This will be implemented later - mainly for nagios-type stuff.
+
+	cpu_details_outfile = open("/tmp/cpu_details", "w")
+	cpu_details_outfile.write(cpu_details_out)
+	cpu_details_outfile.close()
+"""
 
 if __name__ == "__main__":
 	daemon = collector('/tmp/collector.pid')
