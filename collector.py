@@ -52,11 +52,17 @@ def get_load():
 	load5 = os.getloadavg()[1]
 	load15 = os.getloadavg()[2]
 
-	output_build = "p=/", hostname, "/load/1-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load1), "\n"
-	output_message = ''.join(output_build)
+	output_load1 = "p=/", hostname, "/load/1-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load1), "\n"
+	output_load5 = "p=/", hostname, "/load/5-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load5), "\n"
+	output_load15 = "p=/", hostname, "/load/15-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load15), "\n"
+	load1_buffer = ''.join(output_load1)
+	load5_buffer = ''.join(output_load5)
+	load15_buffer = ''.join(output_load15)
 
-	load_outfile = open ("/tmp/loadavg_details", "w")
-	load_outfile.write(output_message)
+	load_outfile = open ("/tmp/loadavg_details", "a")
+	load_outfile.write(load1_buffer)
+	load_outfile.write(load5_buffer)
+	load_outfile.write(load15_buffer)
 	load_outfile.close()
 
 """ Below is if we want to write output to a file
