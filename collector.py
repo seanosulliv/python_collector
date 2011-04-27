@@ -5,6 +5,7 @@ from daemon import daemon
 
 hostname = os.uname()[1]
 seperator=""
+yaketydir = "/tmp/yakety/"
 
 class collector(daemon):
 	def run(self):
@@ -45,6 +46,9 @@ def get_memory():
 def get_load():
 
 	stattime = int(time.time())
+	yaketyfile_buffer = yaketydir, str(stattime), ".", hostname, ".load"
+	yaketyfile = ''.join(yaketyfile_buffer)
+
 	rrd_type = "GAUGE"
 	rrd_interval = "60"
 
@@ -52,6 +56,7 @@ def get_load():
 	load5 = os.getloadavg()[1]
 	load15 = os.getloadavg()[2]
 
+	#Write Yaketystats output
 	output_load1 = "p=/", hostname, "/load/1-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load1), "\n"
 	output_load5 = "p=/", hostname, "/load/5-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load5), "\n"
 	output_load15 = "p=/", hostname, "/load/15-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load15), "\n"
@@ -59,7 +64,7 @@ def get_load():
 	load5_buffer = ''.join(output_load5)
 	load15_buffer = ''.join(output_load15)
 
-	load_outfile = open ("/tmp/loadavg_details", "a")
+	load_outfile = open (yaketyfile, "a")
 	load_outfile.write(load1_buffer)
 	load_outfile.write(load5_buffer)
 	load_outfile.write(load15_buffer)
