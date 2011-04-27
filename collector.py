@@ -4,7 +4,7 @@ import os, shlex, subprocess, sys, time
 from daemon import daemon
 
 hostname = os.uname()[1]
-seperator = ""
+seperator=""
 
 class collector(daemon):
 	def run(self):
@@ -44,7 +44,7 @@ def get_memory():
 
 def get_load():
 
-	time = int(time.time())
+	stattime = int(time.time())
 	rrd_type = "GAUGE"
 	rrd_interval = "60"
 
@@ -52,11 +52,12 @@ def get_load():
 	load5 = os.getloadavg()[1]
 	load15 = os.getloadavg()[2]
 
-	output_message = "p=/", hostname, "/load/1-minute", seperator, "t=", rrd_type, seperator, "i=", rrd_interval, seperator, "ts=", time, seperator, "v=", load1, "\n"
+	output_build = "p=/", hostname, "/load/1-minute", seperator, "t=", rrd_type, seperator, "i=", str(rrd_interval), seperator, "ts=", str(stattime), seperator, "v=", str(load1), "\n"
+	output_message = ''.join(output_build)
 
 	load_outfile = open ("/tmp/loadavg_details", "w")
 	load_outfile.write(output_message)
-	load.outfile.close()
+	load_outfile.close()
 
 """ Below is if we want to write output to a file
 	This will be implemented later - mainly for nagios-type stuff.
@@ -76,8 +77,8 @@ def get_cpufreqs():
 		while cpusplit[1] != "MHz":
 			cpuline = cpufreqsfile.readline()
 			cpusplit = cpuline.split()
-	cpufreqsfile.close()
 
+	cpufreqsfile.close()
 	cpumhz = cpusplit[3]
 	numcpu = cpufreqs.count("cpu MHz")
 	cpufreqsarray = shlex.split(cpufreqs.strip())
