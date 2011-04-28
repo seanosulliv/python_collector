@@ -123,6 +123,39 @@ def get_cpuuse():
 	cpu_details_outfile.close()
 """
 
+def get_procstat():
+	procstatname = list()
+	procstatuser = list()
+	procstatnice = list()
+	procstatsys = list()
+	procstatidle = list()
+	procstatuserhz = list()
+	procstatiowait = list()
+	procstatirq = list()
+	procstatsirq = list()
+	procstatsteal = list()
+	procstatguest = list()
+
+	procstatfile = open("/proc/stat", "r")
+	procstats = procstatfile.read()
+	procstatfile.seek(0)
+	procstatline = procstatfile.readline()
+	procstatsplit = procstatline.split()
+	while procstatsplit[0].startswith("cpu"):
+		procstatname.append(procstatsplit[0])
+		procstatuser.append(procstatsplit[1])
+		procstatnice.append(procstatsplit[2])
+		procstatsys.append(procstatsplit[3])
+		procstatidle.append(procstatsplit[4])
+		procstatuserhz.append(procstatsplit[5])
+		procstatiowait.append(procstatsplit[6])
+		procstatirq.append(procstatsplit[7])
+		procstatsirq.append(procstatsplit[8])
+		procstatsteal.append(procstatsplit[9])
+		procstatguest.append(procstatsplit[10])
+		procstatline.readline()
+		procstatsplit = procstatline.split()
+
 if __name__ == "__main__":
 	daemon = collector('/tmp/collector.pid')
 	if len(sys.argv) == 2:
